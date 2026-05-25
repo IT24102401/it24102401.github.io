@@ -622,32 +622,30 @@ const DEFAULT_SKILLS = [
 
 let state = {projects:[],log:[],skills:[],settings:{...DEFAULT_SETTINGS},password:DEFAULT_PASSWORD};
 
-async function load(){
+function load(){
   try{
-    const [pr,lo,sk,se,pw] = await Promise.all([
-      window.storage.get(STORAGE_KEYS.projects).catch(()=>null),
-      window.storage.get(STORAGE_KEYS.log).catch(()=>null),
-      window.storage.get(STORAGE_KEYS.skills).catch(()=>null),
-      window.storage.get(STORAGE_KEYS.settings).catch(()=>null),
-      window.storage.get(STORAGE_KEYS.password).catch(()=>null),
-    ]);
-    state.projects = pr ? JSON.parse(pr.value) : [];
-    state.log = lo ? JSON.parse(lo.value) : [];
-    state.skills = sk ? JSON.parse(sk.value) : DEFAULT_SKILLS;
-    state.settings = se ? JSON.parse(se.value) : {...DEFAULT_SETTINGS};
-    state.password = pw ? pw.value : DEFAULT_PASSWORD;
+    const pr = localStorage.getItem(STORAGE_KEYS.projects);
+    const lo = localStorage.getItem(STORAGE_KEYS.log);
+    const sk = localStorage.getItem(STORAGE_KEYS.skills);
+    const se = localStorage.getItem(STORAGE_KEYS.settings);
+    const pw = localStorage.getItem(STORAGE_KEYS.password);
+    state.projects = pr ? JSON.parse(pr) : [];
+    state.log = lo ? JSON.parse(lo) : [];
+    state.skills = sk ? JSON.parse(sk) : DEFAULT_SKILLS;
+    state.settings = se ? JSON.parse(se) : {...DEFAULT_SETTINGS};
+    state.password = pw ? pw : DEFAULT_PASSWORD;
   } catch(e){
     state.skills = DEFAULT_SKILLS;
   }
   render();
 }
 
-async function save(key){
-  const map = {projects:state.projects,log:state.log,skills:state.skills,settings:state.settings};
+function save(key){
   if(key==='password'){
-    await window.storage.set(STORAGE_KEYS.password, state.password);
+    localStorage.setItem(STORAGE_KEYS.password, state.password);
   } else {
-    await window.storage.set(STORAGE_KEYS[key], JSON.stringify(map[key]));
+    const map = {projects:state.projects,log:state.log,skills:state.skills,settings:state.settings};
+    localStorage.setItem(STORAGE_KEYS[key], JSON.stringify(map[key]));
   }
 }
 
