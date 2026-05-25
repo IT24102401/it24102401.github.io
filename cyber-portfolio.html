@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Amila // CyberSec Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#040d0a;
+  --bg2:#081310;
+  --surface:#0c1f1a;
+  --surface2:#102820;
+  --border:#1a4030;
+  --green:#00ff88;
+  --green2:#00cc6a;
+  --green3:#004d28;
+  --dim:#1f6b47;
+  --text:#c8ffe6;
+  --muted:#4d9970;
+  --mono:'Space Mono',monospace;
+  --display:'Syne',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--mono);
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  cursor:default;
+}
+
+/* SCANLINE OVERLAY */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,0.012) 2px,rgba(0,255,136,0.012) 4px);
+  pointer-events:none;z-index:9999;
+}
+
+/* GRID BG */
+.grid-bg{
+  position:fixed;inset:0;
+  background-image:linear-gradient(rgba(0,255,136,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.04) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;z-index:0;
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 5%;height:56px;
+  background:rgba(4,13,10,0.92);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(8px);
+}
+.nav-id{
+  font-family:var(--mono);font-size:.75rem;color:var(--green);
+  display:flex;align-items:center;gap:.5rem;
+}
+.nav-id .bracket{color:var(--dim)}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center}
+.nav-links a{
+  font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+  text-decoration:none;color:var(--muted);transition:color .2s;
+}
+.nav-links a:hover{color:var(--green)}
+.admin-btn{
+  font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.35rem .75rem;border:1px solid var(--border);
+  background:transparent;color:var(--muted);cursor:pointer;
+  font-family:var(--mono);transition:all .2s;
+}
+.admin-btn:hover{border-color:var(--green);color:var(--green)}
+
+/* HERO */
+#hero{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:8rem 8% 4rem;
+}
+.hero-pre{
+  font-size:.7rem;color:var(--dim);letter-spacing:.15em;margin-bottom:1rem;
+  animation:fadeIn .5s ease both;
+}
+.hero-pre span{color:var(--green)}
+.hero-name{
+  font-family:var(--display);
+  font-size:clamp(3.5rem,9vw,8rem);
+  font-weight:800;line-height:.95;
+  color:var(--text);
+  animation:fadeIn .5s .15s ease both;
+}
+.hero-name .accent{
+  color:transparent;
+  -webkit-text-stroke:1px var(--green);
+}
+.hero-role{
+  margin-top:1.5rem;
+  font-size:.85rem;color:var(--green);letter-spacing:.05em;
+  animation:fadeIn .5s .3s ease both;
+}
+.hero-role .cursor{
+  display:inline-block;width:8px;height:1em;
+  background:var(--green);margin-left:3px;
+  animation:blink 1s step-end infinite;vertical-align:middle;
+}
+.hero-desc{
+  margin-top:1.5rem;max-width:500px;
+  font-size:.8rem;line-height:1.9;color:var(--muted);
+  animation:fadeIn .5s .45s ease both;
+}
+.hero-cta{
+  margin-top:2.5rem;display:flex;gap:1rem;flex-wrap:wrap;
+  animation:fadeIn .5s .6s ease both;
+}
+.btn{
+  display:inline-block;padding:.65rem 1.5rem;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;
+  text-transform:uppercase;text-decoration:none;
+  border:1px solid;cursor:pointer;transition:all .2s;
+}
+.btn-primary{border-color:var(--green);color:var(--bg);background:var(--green)}
+.btn-primary:hover{background:var(--green2);border-color:var(--green2)}
+.btn-outline{border-color:var(--border);color:var(--muted);background:transparent}
+.btn-outline:hover{border-color:var(--green);color:var(--green)}
+
+.hero-stats{
+  display:flex;gap:3rem;margin-top:4rem;
+  animation:fadeIn .5s .75s ease both;
+}
+.hstat{border-left:2px solid var(--green3);padding-left:1rem}
+.hstat-n{font-size:1.8rem;font-weight:700;color:var(--green);font-family:var(--display)}
+.hstat-l{font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem}
+
+/* SECTION COMMON */
+section{position:relative;z-index:1;padding:6rem 8%;max-width:1200px;margin:0 auto}
+.s-tag{
+  font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:.5rem;
+  display:flex;align-items:center;gap:.5rem;
+}
+.s-tag::before{content:'//';color:var(--green)}
+.s-title{
+  font-family:var(--display);font-size:clamp(1.8rem,3.5vw,2.8rem);
+  font-weight:800;color:var(--text);margin-bottom:.5rem;
+}
+.s-sub{font-size:.78rem;color:var(--muted);margin-bottom:3rem;line-height:1.8}
+
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s,transform .6s}
+.reveal.vis{opacity:1;transform:none}
+
+/* PROJECTS */
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--border)}
+.project-card{
+  background:var(--surface);padding:1.75rem;
+  transition:background .2s;position:relative;overflow:hidden;
+}
+.project-card:hover{background:var(--surface2)}
+.project-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--green);transform:scaleX(0);transform-origin:left;
+  transition:transform .3s;
+}
+.project-card:hover::before{transform:scaleX(1)}
+.pc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem}
+.pc-id{font-size:.6rem;color:var(--dim);letter-spacing:.1em}
+.pc-status{
+  font-size:.6rem;letter-spacing:.08em;padding:.2rem .5rem;
+  border:1px solid var(--green3);color:var(--green2);
+}
+.pc-title{font-family:var(--display);font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.6rem}
+.pc-desc{font-size:.75rem;color:var(--muted);line-height:1.8;margin-bottom:1rem}
+.pc-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.25rem}
+.pc-tag{font-size:.6rem;padding:.2rem .5rem;border:1px solid var(--border);color:var(--dim);letter-spacing:.05em}
+.pc-links{display:flex;gap:1rem}
+.pc-link{font-size:.65rem;color:var(--green);text-decoration:none;letter-spacing:.08em;transition:opacity .2s}
+.pc-link:hover{opacity:.7}
+.pc-link::before{content:'> '}
+
+/* LOG */
+.log-list{display:flex;flex-direction:column;gap:1px;background:var(--border)}
+.log-entry{
+  background:var(--surface);padding:1.5rem 1.75rem;
+  display:grid;grid-template-columns:160px 1fr;gap:2rem;
+  transition:background .2s;
+}
+.log-entry:hover{background:var(--surface2)}
+.log-date{font-size:.65rem;color:var(--dim);line-height:1.6;padding-top:.15rem}
+.log-date strong{display:block;color:var(--green);font-size:.75rem;margin-bottom:.2rem}
+.log-body{}
+.log-title{font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:.4rem;font-family:var(--display)}
+.log-text{font-size:.75rem;color:var(--muted);line-height:1.8}
+.log-cat{
+  display:inline-block;margin-top:.6rem;font-size:.6rem;letter-spacing:.1em;
+  padding:.2rem .5rem;border:1px solid var(--green3);color:var(--green2);
+}
+
+/* SKILLS */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1px;background:var(--border)}
+.skill-item{
+  background:var(--surface);padding:1.5rem;
+  transition:background .2s;
+}
+.skill-item:hover{background:var(--surface2)}
+.skill-name{font-size:.8rem;font-weight:700;color:var(--text);margin-bottom:.5rem;font-family:var(--display)}
+.skill-bar{height:2px;background:var(--border);margin-bottom:.5rem;overflow:hidden}
+.skill-fill{height:100%;background:var(--green);transition:width 1.2s ease}
+.skill-lvl{font-size:.6rem;color:var(--dim);letter-spacing:.1em}
+
+/* CONTACT */
+#contact-section{
+  display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start;
+  max-width:1000px;
+}
+.ci-detail{display:flex;gap:.75rem;align-items:center;margin-bottom:.75rem;font-size:.75rem;color:var(--muted)}
+.ci-icon{
+  width:28px;height:28px;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;color:var(--green);flex-shrink:0;
+}
+.contact-form{display:flex;flex-direction:column;gap:.85rem}
+.cf-group{display:flex;flex-direction:column;gap:.3rem}
+.cf-label{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.cf-input{
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text);font-family:var(--mono);font-size:.75rem;
+  padding:.65rem .85rem;transition:border-color .2s;
+}
+.cf-input:focus{outline:none;border-color:var(--green)}
+.cf-input::placeholder{color:var(--green3)}
+
+/* FOOTER */
+footer{
+  position:relative;z-index:1;
+  border-top:1px solid var(--border);
+  padding:1.5rem 8%;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:.6rem;color:var(--dim);
+}
+.footer-links{display:flex;gap:1.5rem}
+.footer-links a{color:var(--dim);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--green)}
+
+/* MODALS */
+.modal-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(4,13,10,0.95);
+  display:none;align-items:center;justify-content:center;
+  padding:2rem;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--surface);border:1px solid var(--border);
+  padding:2.5rem;width:100%;max-width:540px;
+  max-height:90vh;overflow-y:auto;
+  position:relative;
+}
+.modal-title{font-family:var(--display);font-size:1.2rem;font-weight:700;margin-bottom:.25rem;color:var(--text)}
+.modal-sub{font-size:.7rem;color:var(--muted);margin-bottom:2rem}
+.modal-close{
+  position:absolute;top:1.25rem;right:1.25rem;
+  background:transparent;border:none;cursor:pointer;
+  font-family:var(--mono);font-size:.8rem;color:var(--muted);
+  padding:.3rem .5rem;
+}
+.modal-close:hover{color:var(--green)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.login-error{font-size:.7rem;color:#ff4444;margin-top:.5rem;display:none}
+
+/* ADMIN PANEL */
+#admin-panel{
+  position:fixed;inset:0;z-index:400;
+  background:var(--bg2);
+  display:none;flex-direction:column;
+  overflow:hidden;
+}
+#admin-panel.open{display:flex}
+.ap-bar{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:0 2rem;height:52px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.ap-bar-title{font-size:.75rem;color:var(--green);letter-spacing:.1em}
+.ap-close{
+  background:transparent;border:1px solid var(--border);
+  font-family:var(--mono);font-size:.65rem;color:var(--muted);
+  padding:.3rem .75rem;cursor:pointer;
+  letter-spacing:.08em;
+}
+.ap-close:hover{border-color:var(--green);color:var(--green)}
+.ap-body{display:flex;flex:1;overflow:hidden}
+.ap-sidebar{
+  width:180px;border-right:1px solid var(--border);
+  padding:1.5rem 0;flex-shrink:0;
+  overflow-y:auto;
+}
+.ap-nav-btn{
+  display:block;width:100%;padding:.75rem 1.5rem;
+  background:transparent;border:none;cursor:pointer;
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);text-align:left;transition:all .2s;
+  border-left:2px solid transparent;
+}
+.ap-nav-btn:hover{color:var(--green);background:var(--surface)}
+.ap-nav-btn.active{color:var(--green);border-left-color:var(--green);background:var(--surface)}
+.ap-content{flex:1;padding:2rem;overflow-y:auto}
+.ap-section{display:none}
+.ap-section.active{display:block}
+.ap-section-title{
+  font-family:var(--display);font-size:1.1rem;font-weight:700;
+  color:var(--text);margin-bottom:1.5rem;
+  padding-bottom:.75rem;border-bottom:1px solid var(--border);
+}
+.ap-form{display:flex;flex-direction:column;gap:.85rem;max-width:600px}
+.ap-label{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:.3rem}
+.ap-input{
+  background:var(--bg2);border:1px solid var(--border);
+  color:var(--text);font-family:var(--mono);font-size:.75rem;
+  padding:.65rem .85rem;width:100%;transition:border-color .2s;
+}
+.ap-input:focus{outline:none;border-color:var(--green)}
+.ap-input::placeholder{color:var(--green3)}
+textarea.ap-input{min-height:90px;resize:vertical}
+.ap-btn{
+  padding:.6rem 1.25rem;font-family:var(--mono);font-size:.7rem;
+  letter-spacing:.1em;text-transform:uppercase;cursor:pointer;
+  border:1px solid var(--green);color:var(--bg);background:var(--green);
+  transition:all .2s;align-self:flex-start;
+}
+.ap-btn:hover{background:var(--green2)}
+.ap-btn-del{
+  padding:.4rem .75rem;font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.08em;cursor:pointer;
+  border:1px solid #3a1010;color:#cc4444;background:transparent;
+  transition:all .2s;
+}
+.ap-btn-del:hover{border-color:#cc4444;background:#1a0808}
+.ap-list{display:flex;flex-direction:column;gap:1px;background:var(--border);margin-bottom:2rem}
+.ap-list-item{
+  background:var(--surface);padding:1rem 1.25rem;
+  display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;
+}
+.ap-list-item-info{flex:1}
+.ap-list-item-title{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:.2rem;font-family:var(--display)}
+.ap-list-item-meta{font-size:.65rem;color:var(--muted)}
+.ap-list-item-actions{display:flex;gap:.5rem;flex-shrink:0}
+.ap-success{font-size:.7rem;color:var(--green);margin-top:.5rem;display:none}
+
+/* EMPTY STATE */
+.empty{
+  padding:3rem;text-align:center;
+  font-size:.72rem;color:var(--dim);
+  border:1px dashed var(--border);
+}
+.empty::before{content:'> ';color:var(--green)}
+
+/* ANIMATIONS */
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes scanIn{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0% 0 0)}}
+
+/* RESPONSIVE */
+@media(max-width:700px){
+  #contact-section{grid-template-columns:1fr}
+  .log-entry{grid-template-columns:1fr}
+  .hero-stats{gap:1.5rem}
+  .form-row{grid-template-columns:1fr}
+  .ap-sidebar{width:140px}
+}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-id"><span class="bracket">[</span>AMILA<span class="bracket">]</span></div>
+  <ul class="nav-links">
+    <li><a href="#about-hero">About</a></li>
+    <li><a href="#projects-section">Projects</a></li>
+    <li><a href="#log-section">Log</a></li>
+    <li><a href="#skills-section">Skills</a></li>
+    <li><a href="#contact-wrap">Contact</a></li>
+    <li><button class="admin-btn" onclick="openLogin()">// Admin</button></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="about-hero" style="max-width:100%;padding-left:8%;padding-right:8%">
+  <div id="hero">
+    <p class="hero-pre">$ whoami <span>→</span></p>
+    <h1 class="hero-name">AMILA<br/><span class="accent">SEC//DEV</span></h1>
+    <p class="hero-role">Cybersecurity Undergraduate<span class="cursor"></span></p>
+    <p class="hero-desc">
+      Exploring the intersection of offensive security, network defence, and software engineering. I document every CTF, every tool I build, every thing I learn — right here.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects-section" class="btn btn-primary">View Projects</a>
+      <a href="#log-section" class="btn btn-outline">Learning Log</a>
+    </div>
+    <div class="hero-stats" id="hero-stats">
+      <div class="hstat"><div class="hstat-n" id="hs-projects">0</div><div class="hstat-l">Projects</div></div>
+      <div class="hstat"><div class="hstat-n" id="hs-logs">0</div><div class="hstat-l">Log Entries</div></div>
+      <div class="hstat"><div class="hstat-n">∞</div><div class="hstat-l">Things to Learn</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects-section" style="max-width:100%;padding-left:8%;padding-right:8%">
+  <div class="reveal">
+    <p class="s-tag">Projects</p>
+    <h2 class="s-title">What I've Built</h2>
+    <p class="s-sub">Tools, scripts, research projects, and CTF writeups. Updated regularly.</p>
+  </div>
+  <div id="projects-grid" class="projects-grid reveal"></div>
+  <div id="projects-empty" class="empty reveal" style="display:none">No projects yet. Add your first one via Admin.</div>
+</section>
+
+<!-- LOG -->
+<section id="log-section" style="max-width:100%;padding-left:8%;padding-right:8%">
+  <div class="reveal">
+    <p class="s-tag">Learning Log</p>
+    <h2 class="s-title">Daily Progress</h2>
+    <p class="s-sub">A running record of techniques learned, tools explored, and concepts understood.</p>
+  </div>
+  <div id="log-list" class="log-list reveal"></div>
+  <div id="log-empty" class="empty reveal" style="display:none">No log entries yet. Start your learning log via Admin.</div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills-section" style="max-width:100%;padding-left:8%;padding-right:8%">
+  <div class="reveal">
+    <p class="s-tag">Skills</p>
+    <h2 class="s-title">Arsenal</h2>
+    <p class="s-sub">Tools, technologies, and domains I work in.</p>
+  </div>
+  <div id="skills-grid" class="skills-grid reveal"></div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact-wrap" style="max-width:100%;padding-left:8%;padding-right:8%">
+  <div class="reveal">
+    <p class="s-tag">Contact</p>
+    <h2 class="s-title">Get in Touch</h2>
+  </div>
+  <div id="contact-section" class="reveal">
+    <div>
+      <p style="font-size:.78rem;color:var(--muted);line-height:1.9;margin-bottom:2rem">
+        Open to internships, research collaborations, CTF teams, and interesting conversations about security.
+      </p>
+      <div class="ci-detail"><div class="ci-icon">@</div><span id="ci-email">amila@email.com</span></div>
+      <div class="ci-detail"><div class="ci-icon">gh</div><a href="#" id="ci-github" style="color:var(--muted);text-decoration:none">github.com/amila</a></div>
+      <div class="ci-detail"><div class="ci-icon">in</div><span id="ci-linkedin">linkedin.com/in/amila</span></div>
+    </div>
+    <div class="contact-form">
+      <div class="cf-group"><label class="cf-label">Name</label><input class="cf-input" placeholder="Your name"/></div>
+      <div class="cf-group"><label class="cf-label">Email</label><input class="cf-input" placeholder="you@email.com"/></div>
+      <div class="cf-group"><label class="cf-label">Message</label><textarea class="cf-input" style="min-height:100px" placeholder="What's on your mind?"></textarea></div>
+      <button class="btn btn-primary" style="margin-top:.25rem" onclick="this.textContent='Sent ✓';this.disabled=true;setTimeout(()=>{this.textContent='Send Message';this.disabled=false},3000)">Send Message</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>// AMILA &mdash; CYBERSECURITY PORTFOLIO</span>
+  <div class="footer-links">
+    <a href="#" id="footer-github">GitHub</a>
+    <a href="#" id="footer-linkedin">LinkedIn</a>
+  </div>
+</footer>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="login-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeLogin()">[ ESC ]</button>
+    <div class="modal-title">Admin Access</div>
+    <div class="modal-sub">// Enter credentials to manage portfolio content</div>
+    <div class="ap-form">
+      <div><label class="ap-label">Password</label><input class="ap-input" type="password" id="login-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      <div id="login-err" class="login-error">// Access denied. Wrong password.</div>
+      <button class="ap-btn" onclick="doLogin()">Authenticate →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel">
+  <div class="ap-bar">
+    <span class="ap-bar-title">// ADMIN PANEL — Portfolio Manager</span>
+    <button class="ap-close" onclick="closeAdmin()">[ EXIT ]</button>
+  </div>
+  <div class="ap-body">
+    <div class="ap-sidebar">
+      <button class="ap-nav-btn active" onclick="apTab('projects')">Projects</button>
+      <button class="ap-nav-btn" onclick="apTab('log')">Learning Log</button>
+      <button class="ap-nav-btn" onclick="apTab('skills')">Skills</button>
+      <button class="ap-nav-btn" onclick="apTab('settings')">Settings</button>
+    </div>
+    <div class="ap-content">
+
+      <!-- Projects Tab -->
+      <div id="ap-projects" class="ap-section active">
+        <div class="ap-section-title">Manage Projects</div>
+        <div id="ap-projects-list" class="ap-list"></div>
+        <div class="ap-section-title" style="margin-top:2rem;font-size:.9rem">Add New Project</div>
+        <div class="ap-form">
+          <div><label class="ap-label">Project Title</label><input class="ap-input" id="pj-title" placeholder="e.g. Port Scanner Tool"/></div>
+          <div><label class="ap-label">Description</label><textarea class="ap-input" id="pj-desc" placeholder="What does it do? What did you learn?"></textarea></div>
+          <div class="form-row">
+            <div><label class="ap-label">Status</label>
+              <select class="ap-input" id="pj-status">
+                <option value="Active">Active</option>
+                <option value="Completed">Completed</option>
+                <option value="WIP">Work In Progress</option>
+                <option value="Archive">Archive</option>
+              </select>
+            </div>
+            <div><label class="ap-label">GitHub URL</label><input class="ap-input" id="pj-github" placeholder="https://github.com/..."/></div>
+          </div>
+          <div><label class="ap-label">Live Demo URL (optional)</label><input class="ap-input" id="pj-demo" placeholder="https://..."/></div>
+          <div><label class="ap-label">Tags (comma separated)</label><input class="ap-input" id="pj-tags" placeholder="Python, Network, CTF"/></div>
+          <button class="ap-btn" onclick="addProject()">Add Project</button>
+          <span class="ap-success" id="pj-success">// Project added successfully.</span>
+        </div>
+      </div>
+
+      <!-- Log Tab -->
+      <div id="ap-log" class="ap-section">
+        <div class="ap-section-title">Manage Learning Log</div>
+        <div id="ap-log-list" class="ap-list"></div>
+        <div class="ap-section-title" style="margin-top:2rem;font-size:.9rem">Add Log Entry</div>
+        <div class="ap-form">
+          <div><label class="ap-label">Title / Topic</label><input class="ap-input" id="log-title" placeholder="e.g. SQL Injection fundamentals"/></div>
+          <div><label class="ap-label">What I learned / did</label><textarea class="ap-input" id="log-body" placeholder="Describe what you learned, commands used, resources, notes..."></textarea></div>
+          <div class="form-row">
+            <div><label class="ap-label">Category</label>
+              <select class="ap-input" id="log-cat">
+                <option>Web Security</option>
+                <option>Network</option>
+                <option>Reverse Engineering</option>
+                <option>Cryptography</option>
+                <option>OSINT</option>
+                <option>CTF</option>
+                <option>Tool / Script</option>
+                <option>Research</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div><label class="ap-label">Date</label><input class="ap-input" type="date" id="log-date"/></div>
+          </div>
+          <button class="ap-btn" onclick="addLog()">Add Entry</button>
+          <span class="ap-success" id="log-success">// Entry added successfully.</span>
+        </div>
+      </div>
+
+      <!-- Skills Tab -->
+      <div id="ap-skills" class="ap-section">
+        <div class="ap-section-title">Manage Skills</div>
+        <div id="ap-skills-list" class="ap-list"></div>
+        <div class="ap-section-title" style="margin-top:2rem;font-size:.9rem">Add Skill</div>
+        <div class="ap-form">
+          <div><label class="ap-label">Skill Name</label><input class="ap-input" id="sk-name" placeholder="e.g. Nmap, Burp Suite, Python"/></div>
+          <div><label class="ap-label">Proficiency (0–100)</label><input class="ap-input" type="number" id="sk-level" min="0" max="100" placeholder="75"/></div>
+          <button class="ap-btn" onclick="addSkill()">Add Skill</button>
+          <span class="ap-success" id="sk-success">// Skill added.</span>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div id="ap-settings" class="ap-section">
+        <div class="ap-section-title">Settings</div>
+        <div class="ap-form">
+          <div><label class="ap-label">Display Name</label><input class="ap-input" id="cfg-name" placeholder="Amila"/></div>
+          <div><label class="ap-label">Email</label><input class="ap-input" id="cfg-email" placeholder="amila@email.com"/></div>
+          <div><label class="ap-label">GitHub URL</label><input class="ap-input" id="cfg-github" placeholder="https://github.com/amila"/></div>
+          <div><label class="ap-label">LinkedIn URL</label><input class="ap-input" id="cfg-linkedin" placeholder="https://linkedin.com/in/amila"/></div>
+          <div><label class="ap-label">Bio / Tagline</label><textarea class="ap-input" id="cfg-bio" placeholder="Cybersecurity undergraduate..."></textarea></div>
+          <div><label class="ap-label">Change Password</label><input class="ap-input" type="password" id="cfg-pw" placeholder="New password (leave blank to keep current)"/></div>
+          <button class="ap-btn" onclick="saveSettings()">Save Settings</button>
+          <span class="ap-success" id="cfg-success">// Settings saved.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEYS = {
+  projects: 'portfolio-projects',
+  log: 'portfolio-log',
+  skills: 'portfolio-skills',
+  settings: 'portfolio-settings',
+  password: 'portfolio-password'
+};
+
+const DEFAULT_SETTINGS = {
+  name:'Amila',email:'amila@email.com',
+  github:'https://github.com/amila',
+  linkedin:'https://linkedin.com/in/amila',
+  bio:'Exploring the intersection of offensive security, network defence, and software engineering. I document every CTF, every tool I build, every thing I learn — right here.'
+};
+const DEFAULT_PASSWORD = 'cyber2024';
+
+const DEFAULT_SKILLS = [
+  {id:'s1',name:'Python',level:80},
+  {id:'s2',name:'Linux / Bash',level:75},
+  {id:'s3',name:'Nmap',level:70},
+  {id:'s4',name:'Burp Suite',level:65},
+  {id:'s5',name:'Wireshark',level:60},
+  {id:'s6',name:'Web Security',level:70},
+  {id:'s7',name:'Cryptography',level:55},
+  {id:'s8',name:'Git / GitHub',level:80},
+];
+
+let state = {projects:[],log:[],skills:[],settings:{...DEFAULT_SETTINGS},password:DEFAULT_PASSWORD};
+
+async function load(){
+  try{
+    const [pr,lo,sk,se,pw] = await Promise.all([
+      window.storage.get(STORAGE_KEYS.projects).catch(()=>null),
+      window.storage.get(STORAGE_KEYS.log).catch(()=>null),
+      window.storage.get(STORAGE_KEYS.skills).catch(()=>null),
+      window.storage.get(STORAGE_KEYS.settings).catch(()=>null),
+      window.storage.get(STORAGE_KEYS.password).catch(()=>null),
+    ]);
+    state.projects = pr ? JSON.parse(pr.value) : [];
+    state.log = lo ? JSON.parse(lo.value) : [];
+    state.skills = sk ? JSON.parse(sk.value) : DEFAULT_SKILLS;
+    state.settings = se ? JSON.parse(se.value) : {...DEFAULT_SETTINGS};
+    state.password = pw ? pw.value : DEFAULT_PASSWORD;
+  } catch(e){
+    state.skills = DEFAULT_SKILLS;
+  }
+  render();
+}
+
+async function save(key){
+  const map = {projects:state.projects,log:state.log,skills:state.skills,settings:state.settings};
+  if(key==='password'){
+    await window.storage.set(STORAGE_KEYS.password, state.password);
+  } else {
+    await window.storage.set(STORAGE_KEYS[key], JSON.stringify(map[key]));
+  }
+}
+
+function render(){
+  renderSettings();
+  renderProjects();
+  renderLog();
+  renderSkills();
+  updateStats();
+}
+
+function updateStats(){
+  document.getElementById('hs-projects').textContent = state.projects.length;
+  document.getElementById('hs-logs').textContent = state.log.length;
+}
+
+function renderSettings(){
+  const s = state.settings;
+  document.querySelector('.hero-desc').textContent = s.bio || DEFAULT_SETTINGS.bio;
+  document.getElementById('ci-email').textContent = s.email || DEFAULT_SETTINGS.email;
+  const ghEl = document.getElementById('ci-github');
+  ghEl.textContent = (s.github||'').replace('https://','');
+  ghEl.href = s.github||'#';
+  document.getElementById('ci-linkedin').textContent = (s.linkedin||'').replace('https://','');
+  document.getElementById('footer-github').href = s.github||'#';
+  document.getElementById('footer-linkedin').href = s.linkedin||'#';
+  document.getElementById('cfg-name').value = s.name||'';
+  document.getElementById('cfg-email').value = s.email||'';
+  document.getElementById('cfg-github').value = s.github||'';
+  document.getElementById('cfg-linkedin').value = s.linkedin||'';
+  document.getElementById('cfg-bio').value = s.bio||'';
+}
+
+function renderProjects(){
+  const grid = document.getElementById('projects-grid');
+  const empty = document.getElementById('projects-empty');
+  const apList = document.getElementById('ap-projects-list');
+  if(!state.projects.length){
+    grid.innerHTML='';grid.style.display='none';empty.style.display='block';
+    apList.innerHTML='';return;
+  }
+  grid.style.display='grid';empty.style.display='none';
+  grid.innerHTML = state.projects.map((p,i)=>`
+    <div class="project-card">
+      <div class="pc-header">
+        <span class="pc-id">PRJ-${String(i+1).padStart(3,'0')}</span>
+        <span class="pc-status">${p.status}</span>
+      </div>
+      <div class="pc-title">${esc(p.title)}</div>
+      <div class="pc-desc">${esc(p.desc)}</div>
+      <div class="pc-tags">${(p.tags||[]).map(t=>`<span class="pc-tag">${esc(t)}</span>`).join('')}</div>
+      <div class="pc-links">
+        ${p.github?`<a class="pc-link" href="${esc(p.github)}" target="_blank">GitHub</a>`:''}
+        ${p.demo?`<a class="pc-link" href="${esc(p.demo)}" target="_blank">Demo</a>`:''}
+      </div>
+    </div>`).join('');
+  apList.innerHTML = state.projects.map((p,i)=>`
+    <div class="ap-list-item">
+      <div class="ap-list-item-info">
+        <div class="ap-list-item-title">${esc(p.title)}</div>
+        <div class="ap-list-item-meta">${p.status} &bull; ${(p.tags||[]).join(', ')}</div>
+      </div>
+      <div class="ap-list-item-actions">
+        <button class="ap-btn-del" onclick="deleteProject(${i})">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderLog(){
+  const list = document.getElementById('log-list');
+  const empty = document.getElementById('log-empty');
+  const apList = document.getElementById('ap-log-list');
+  const sorted = [...state.log].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if(!sorted.length){
+    list.innerHTML='';list.style.display='none';empty.style.display='block';
+    apList.innerHTML='';return;
+  }
+  list.style.display='flex';empty.style.display='none';
+  list.innerHTML = sorted.map(e=>`
+    <div class="log-entry">
+      <div class="log-date">
+        <strong>${fmtDate(e.date)}</strong>
+        <span class="log-cat">${esc(e.category)}</span>
+      </div>
+      <div class="log-body">
+        <div class="log-title">${esc(e.title)}</div>
+        <div class="log-text">${esc(e.body)}</div>
+      </div>
+    </div>`).join('');
+  apList.innerHTML = state.log.map((e,i)=>`
+    <div class="ap-list-item">
+      <div class="ap-list-item-info">
+        <div class="ap-list-item-title">${esc(e.title)}</div>
+        <div class="ap-list-item-meta">${e.category} &bull; ${fmtDate(e.date)}</div>
+      </div>
+      <div class="ap-list-item-actions">
+        <button class="ap-btn-del" onclick="deleteLog(${i})">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderSkills(){
+  const grid = document.getElementById('skills-grid');
+  const apList = document.getElementById('ap-skills-list');
+  grid.innerHTML = state.skills.map(s=>`
+    <div class="skill-item">
+      <div class="skill-name">${esc(s.name)}</div>
+      <div class="skill-bar"><div class="skill-fill" data-w="${s.level}" style="width:0%"></div></div>
+      <div class="skill-lvl">${s.level}%</div>
+    </div>`).join('');
+  apList.innerHTML = state.skills.map((s,i)=>`
+    <div class="ap-list-item">
+      <div class="ap-list-item-info">
+        <div class="ap-list-item-title">${esc(s.name)}</div>
+        <div class="ap-list-item-meta">Proficiency: ${s.level}%</div>
+      </div>
+      <div class="ap-list-item-actions">
+        <button class="ap-btn-del" onclick="deleteSkill(${i})">Delete</button>
+      </div>
+    </div>`).join('');
+  setTimeout(()=>{
+    document.querySelectorAll('.skill-fill').forEach(el=>{
+      el.style.width = el.dataset.w + '%';
+    });
+  },300);
+}
+
+function esc(s){ const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML; }
+function fmtDate(d){ try{return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}catch{return d} }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6) }
+
+function addProject(){
+  const title=document.getElementById('pj-title').value.trim();
+  const desc=document.getElementById('pj-desc').value.trim();
+  if(!title||!desc){alert('Title and description required');return}
+  const tags = document.getElementById('pj-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  state.projects.push({
+    id:uid(),title,desc,
+    status:document.getElementById('pj-status').value,
+    github:document.getElementById('pj-github').value.trim(),
+    demo:document.getElementById('pj-demo').value.trim(),
+    tags,date:new Date().toISOString()
+  });
+  save('projects');
+  ['pj-title','pj-desc','pj-github','pj-demo','pj-tags'].forEach(id=>document.getElementById(id).value='');
+  renderProjects();updateStats();
+  showSuccess('pj-success');
+}
+
+function deleteProject(i){
+  if(!confirm('Delete this project?'))return;
+  state.projects.splice(i,1);
+  save('projects');renderProjects();updateStats();
+}
+
+function addLog(){
+  const title=document.getElementById('log-title').value.trim();
+  const body=document.getElementById('log-body').value.trim();
+  if(!title||!body){alert('Title and content required');return}
+  state.log.push({
+    id:uid(),title,body,
+    category:document.getElementById('log-cat').value,
+    date:document.getElementById('log-date').value||new Date().toISOString().slice(0,10)
+  });
+  save('log');
+  document.getElementById('log-title').value='';
+  document.getElementById('log-body').value='';
+  renderLog();updateStats();
+  showSuccess('log-success');
+}
+
+function deleteLog(i){
+  if(!confirm('Delete this log entry?'))return;
+  state.log.splice(i,1);
+  save('log');renderLog();updateStats();
+}
+
+function addSkill(){
+  const name=document.getElementById('sk-name').value.trim();
+  const level=parseInt(document.getElementById('sk-level').value)||50;
+  if(!name){alert('Skill name required');return}
+  state.skills.push({id:uid(),name,level:Math.min(100,Math.max(0,level))});
+  save('skills');
+  document.getElementById('sk-name').value='';
+  document.getElementById('sk-level').value='';
+  renderSkills();showSuccess('sk-success');
+}
+
+function deleteSkill(i){
+  if(!confirm('Delete this skill?'))return;
+  state.skills.splice(i,1);
+  save('skills');renderSkills();
+}
+
+function saveSettings(){
+  state.settings = {
+    name:document.getElementById('cfg-name').value.trim(),
+    email:document.getElementById('cfg-email').value.trim(),
+    github:document.getElementById('cfg-github').value.trim(),
+    linkedin:document.getElementById('cfg-linkedin').value.trim(),
+    bio:document.getElementById('cfg-bio').value.trim()
+  };
+  const newPw = document.getElementById('cfg-pw').value;
+  if(newPw.trim()){state.password=newPw.trim();save('password');}
+  save('settings');renderSettings();
+  showSuccess('cfg-success');
+}
+
+function showSuccess(id){
+  const el=document.getElementById(id);
+  el.style.display='block';
+  setTimeout(()=>el.style.display='none',2500);
+}
+
+function openLogin(){
+  document.getElementById('login-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('login-pw').focus(),100);
+}
+function closeLogin(){
+  document.getElementById('login-modal').classList.remove('open');
+  document.getElementById('login-pw').value='';
+  document.getElementById('login-err').style.display='none';
+}
+function doLogin(){
+  const pw=document.getElementById('login-pw').value;
+  if(pw===state.password){
+    closeLogin();
+    document.getElementById('admin-panel').classList.add('open');
+    document.body.style.overflow='hidden';
+  } else {
+    document.getElementById('login-err').style.display='block';
+  }
+}
+function closeAdmin(){
+  document.getElementById('admin-panel').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function apTab(tab){
+  document.querySelectorAll('.ap-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.ap-nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('ap-'+tab).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    closeLogin();closeAdmin();
+  }
+});
+
+// Scroll reveal
+const ro = new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('vis'),i*80);
+      ro.unobserve(e.target);
+    }
+  });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// Set today as default log date
+document.getElementById('log-date').value = new Date().toISOString().slice(0,10);
+
+load();
+</script>
+</body>
+</html>
